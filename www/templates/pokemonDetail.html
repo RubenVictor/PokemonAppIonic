@@ -1,0 +1,22 @@
+
+<ion-view view-title="PokemonDetail">
+
+        <ion-content>
+
+
+                <ion-list>
+                        <ion-item ng-repeat="image in pokemon.sprites" ui-sref="app.detail({ pokemon: searchResult.name })" ng-if="image != undefined">
+                                <div class="card" >
+                                        <div class="item item-text-wrap" >
+                                                <img ng-src="{{image}}" height="300" width="300" align="left" >
+                                        </div>
+                                </div>
+
+
+
+                        </ion-item>
+                </ion-list>
+
+        </ion-content>
+
+</ion-view>
