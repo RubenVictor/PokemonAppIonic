@@ -60,6 +60,7 @@ angular.module('starter.controllers', [])
   //save how many times the app has been used
 
 
+
      $scope.counter = window.localStorage.getItem('counter');
     console.log($scope.counter);
 
@@ -74,15 +75,25 @@ angular.module('starter.controllers', [])
 
     //search results from spotify in the Spotify factory
     $scope.searchResults = PokemonFactory.searchResults;
+    console.log(PokemonFactory.pokemonCount);
 
     $scope.search = [];
     $scope.search  = function (iets) {
         PokemonFactory.search(iets);
         $scope.searchResults = PokemonFactory.searchResults;
-
     }
-    console.log($scope.search);
 
+    // infinitif scrolling
+    $scope.noMoreItemsAvailable = false;
+
+    $scope.loadMore = function() {
+
+
+        if ( 10 == 10 ) {
+            $scope.noMoreItemsAvailable = true;
+        }
+        $scope.$broadcast('scroll.infiniteScrollComplete');
+    };
 
 
 })
