@@ -8,12 +8,8 @@ angular.module('starter.services', [])
     var searchResults = [];
 
 
-    pokemonCount.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/', {headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"}
-    }).then(function (response) {
+    pokemonCount.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/')
+        .then(function (response) {
         angular.copy(response.data.count, pokemonCount);
         return pokemonCount;
     })
