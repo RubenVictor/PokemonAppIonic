@@ -58,19 +58,19 @@ angular.module('starter.controllers', [])
 
 .controller('SearchController', function($ionicPlatform,$scope, PokemonFactory,$stateParams,$cordovaGeolocation) {
   //save how many times the app has been used
+    var limit = 20;
+    var offset = 0;
 
 
 
      $scope.counter = window.localStorage.getItem('counter');
     console.log($scope.counter);
 
-    //get geolocation from phone
-    $ionicPlatform.ready(function(){
-        $cordovaGeolocation.getCurrentPosition().then(function (position) {
-        });
-    });
-
-
+    // //get geolocation from phone
+    // $ionicPlatform.ready(function(){
+    //     $cordovaGeolocation.getCurrentPosition().then(function (position) {
+    //     });
+    // });
 
 
     //search results from spotify in the Spotify factory
@@ -82,18 +82,37 @@ angular.module('starter.controllers', [])
         PokemonFactory.search(iets);
         $scope.searchResults = PokemonFactory.searchResults;
     }
-
     // infinitif scrolling
+
     $scope.noMoreItemsAvailable = false;
+    var x = 0;
 
     $scope.loadMore = function() {
+        x = 0;
 
-
-        if ( 10 == 10 ) {
-            $scope.noMoreItemsAvailable = true;
+        if ( x < 1 ) {
+            PokemonFactory.loadMore(limit, offset);
+            offset += limit;
+            $scope.noMoreItemsAvailable = false;
+            $scope.$broadcast('searchResults');
+            x++;
         }
         $scope.$broadcast('scroll.infiniteScrollComplete');
+        PokemonFactory.searchResults;
+
     };
+
+    function objectLength(obj) {
+        var result = 0;
+        for(var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                // or Object.prototype.hasOwnProperty.call(obj, prop)
+                result++;
+            }
+        }
+        return result;
+    }
+
 
 
 })

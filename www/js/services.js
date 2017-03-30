@@ -4,33 +4,39 @@ angular.module('starter.services', [])
     //base url
     var baseUrl = 'http://localhost:8080/api/';
     //variable
-    var pokemonCount = 0;
     var searchResults = [];
+    var pokemonCount = 0;
 
 
     pokemonCount.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/')
         .then(function (response) {
-        angular.copy(response.data.count, pokemonCount);
-        return pokemonCount;
+
+        return response.data.count;
     })
 
     pokemon = [{name: ''}];
-    searchResults.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/', {headers: { "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    }}).then(function (response) {
+    searchResults.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/')
+        .then(function (response) {
             angular.copy(response.data.results, searchResults);
 
-        return searchResults;
+            return searchResults, pokemonCount;
         })
 
+    var loadMore = function (limit, offset) {
+     $http.get(baseUrl+'pokemons?limit='+limit+'&offset='+offset+'')
+        .then(function (response) {
+            for (var i=0; i< response.data.results.length; i++){
+                searchResults.push(response.data.results[i]);
+            }
+
+            return searchResults;
+        });
+    }
+
+
     var search = function (searchArg) {
-        searchResults.$promise = $http.get(baseUrl+'pokemon/'+searchArg, {headers: { "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-        }}).then(function (response) {
+        searchResults.$promise = $http.get(baseUrl+'pokemon/'+searchArg)
+            .then(function (response) {
             angular.copy(response.data.results, searchResults );
 
             return searchResults;
@@ -38,11 +44,8 @@ angular.module('starter.services', [])
     }
 
     var findPokemon = function (searchArg) {
-        pokemon.$promise = $http.get(baseUrl+'pokemon/'+searchArg, {headers: { "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-        }}).then(function (response) {
+        pokemon.$promise = $http.get(baseUrl+'pokemon/'+searchArg).
+        then(function (response) {
             angular.copy(response.data, pokemon );
             return pokemon;
         });
@@ -55,6 +58,7 @@ angular.module('starter.services', [])
 
 
     return{
+        loadMore : loadMore,
         pokemonCount: pokemonCount,
         pokemon : pokemon,
         findPokemon : findPokemon,
