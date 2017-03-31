@@ -56,7 +56,7 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('SearchController', function($ionicPlatform,$scope, PokemonFactory,$stateParams,$cordovaGeolocation) {
+.controller('PokemonsController', function($ionicPlatform, $scope, PokemonFactory, $stateParams, $cordovaGeolocation) {
   //save how many times the app has been used
     var limit = 20;
     var offset = 0;
@@ -128,7 +128,16 @@ offset += 20;
 
     })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+    .controller('PokemonsNearbyController', function($scope, $stateParams, PokemonNearbyFactory) {
+
+        $scope.searchResults = PokemonNearbyFactory.searchResults;
+$scope.addToMyPokemons = function(){
+    alert("JAJAJA")
+}
+
+    })
+
+.controller('PlaylistCtrl', function($scope, $stateParams ) {
 
 
 

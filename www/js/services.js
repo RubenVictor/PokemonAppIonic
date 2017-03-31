@@ -5,7 +5,9 @@ angular.module('starter.services', [])
     var baseUrl = 'http://localhost:8080/api/';
     //variable
     var searchResults = [];
-    var pokemonCount = 10000;
+    var pokemonCount = 811;
+    pokemon = [{name: ''}];
+
 
 
     pokemonCount.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/')
@@ -14,7 +16,6 @@ angular.module('starter.services', [])
         return pokemonCount;
     })
 
-    pokemon = [{name: ''}];
     searchResults.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/')
         .then(function (response) {
             angular.copy(response.data.results, searchResults);
@@ -67,3 +68,22 @@ angular.module('starter.services', [])
 
     }
 })
+    .factory('PokemonNearbyFactory', function($http){
+        //base url
+        var baseUrl = 'http://localhost:8080/api/';
+        //variable
+        var searchResults = [];
+
+        searchResults.$promise = $http.get(baseUrl+'pokemons/pokemonLocations')
+            .then(function (response) {
+                angular.copy(response.data, searchResults);
+
+                return searchResults;
+            });
+
+        return{
+
+            searchResults : searchResults
+
+        }
+    })

@@ -32,11 +32,13 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services', "n
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app.pokemonsNearby', {
+    url: '/nearby',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/pokemonNearby.html',
+          controller: 'PokemonsNearbyController'
+
       }
     }
   })
@@ -49,12 +51,20 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services', "n
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+      .state('app.home', {
+          url: '/home',
+          views: {
+              'menuContent': {
+                  templateUrl: 'templates/home.html'
+              }
+          }
+      })
+    .state('app.pokedex', {
+      url: '/pokedex',
       views: {
         'menuContent': {
-          templateUrl: 'templates/SearchResult.html',
-          controller: 'SearchController'
+          templateUrl: 'templates/pokemons.html',
+          controller: 'PokemonsController'
         }
       }
     })
@@ -79,5 +89,5 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services', "n
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/home');
 });

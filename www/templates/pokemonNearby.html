@@ -1,0 +1,14 @@
+<ion-view view-title="Pokemons to catch">
+  <ion-content>
+
+    <ion-list>
+
+      <ion-item
+              ng-repeat="searchResult in searchResults">
+          <i class="icon ion-ios-information" ui-sref="app.detail({ pokemon: searchResult.name })"></i>
+          <i class="icon ion-star" ng-click="addToMyPokemons()"></i>
+          {{searchResult.name}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
