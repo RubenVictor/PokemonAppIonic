@@ -1,5 +1,13 @@
-<ion-view view-title="Browse">
+<ion-view view-title="My pokemons">
   <ion-content>
-    <h1>Browse</h1>
+
+    <ion-list>
+
+      <ion-item
+              ng-repeat="searchResult in searchResults">
+        <i class="icon ion-ios-information" ui-sref="app.detail({ pokemon: searchResult.name })"></i>
+        {{searchResult.name}}
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

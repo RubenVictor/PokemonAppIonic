@@ -129,15 +129,28 @@ offset += 20;
     })
 
     .controller('PokemonsNearbyController', function($scope, $stateParams, PokemonNearbyFactory) {
-
         $scope.searchResults = PokemonNearbyFactory.searchResults;
-$scope.addToMyPokemons = function(){
-    alert("JAJAJA")
+        $scope.addToMyPokemons = function(pokemon){
+
+ if(window.localStorage.getItem('myPokemons') != "") {
+//gets data from local storage puts it in an array and saves it in local storage
+     var a = [];
+     a = (JSON.parse( window.localStorage.getItem('myPokemons')));
+     a[a.length+1] = pokemon;
+     debugger;
+     localStorage.setItem('myPokemons', JSON.stringify(a));
+ }
 }
+
+
+    })
+    .controller('MyPokemonsController', function($scope, $stateParams, MyPokemonFactory) {
+        $scope.searchResults = MyPokemonFactory.searchResults;
 
     })
 
-.controller('PlaylistCtrl', function($scope, $stateParams ) {
+
+    .controller('PlaylistCtrl', function($scope, $stateParams ) {
 
 
 

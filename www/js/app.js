@@ -43,11 +43,13 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services', "n
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.myPokemons', {
+      url: '/myPokemons',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/browse.html',
+            controller: 'MyPokemonsController'
+
         }
       }
     })

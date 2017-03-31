@@ -87,3 +87,15 @@ angular.module('starter.services', [])
 
         }
     })
+    .factory('MyPokemonFactory', function(){
+
+        //variable
+        var searchResults = JSON.parse( window.localStorage.getItem('myPokemons'));
+
+debugger;
+        return{
+
+            searchResults : searchResults
+
+        }
+    })

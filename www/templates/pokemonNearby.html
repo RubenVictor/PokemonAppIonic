@@ -6,7 +6,7 @@
       <ion-item
               ng-repeat="searchResult in searchResults">
           <i class="icon ion-ios-information" ui-sref="app.detail({ pokemon: searchResult.name })"></i>
-          <i class="icon ion-star" ng-click="addToMyPokemons()"></i>
+          <i class="icon ion-star" ng-click="addToMyPokemons(searchResult)"></i>
           {{searchResult.name}}
       </ion-item>
     </ion-list>
