@@ -5,13 +5,13 @@ angular.module('starter.services', [])
     var baseUrl = 'http://localhost:8080/api/';
     //variable
     var searchResults = [];
-    var pokemonCount = 0;
+    var pokemonCount = 10000;
 
 
     pokemonCount.$promise = $http.get(baseUrl+'pokemons?limit=20&offset=0/')
         .then(function (response) {
-
-        return response.data.count;
+        pokemonCount = response.data.count;
+        return pokemonCount;
     })
 
     pokemon = [{name: ''}];
@@ -19,8 +19,8 @@ angular.module('starter.services', [])
         .then(function (response) {
             angular.copy(response.data.results, searchResults);
 
-            return searchResults, pokemonCount;
-        })
+            return searchResults;
+        });
 
     var loadMore = function (limit, offset) {
      $http.get(baseUrl+'pokemons?limit='+limit+'&offset='+offset+'')
@@ -35,7 +35,7 @@ angular.module('starter.services', [])
 
 
     var search = function (searchArg) {
-        searchResults.$promise = $http.get(baseUrl+'pokemon/'+searchArg)
+        searchResults.$promise = $http.get(baseUrl+'pokemons/'+searchArg+'/')
             .then(function (response) {
             angular.copy(response.data.results, searchResults );
 
@@ -44,7 +44,7 @@ angular.module('starter.services', [])
     }
 
     var findPokemon = function (searchArg) {
-        pokemon.$promise = $http.get(baseUrl+'pokemon/'+searchArg).
+        pokemon.$promise = $http.get(baseUrl+'pokemons/'+searchArg).
         then(function (response) {
             angular.copy(response.data, pokemon );
             return pokemon;

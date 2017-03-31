@@ -85,23 +85,25 @@ angular.module('starter.controllers', [])
     // infinitif scrolling
 
     $scope.noMoreItemsAvailable = false;
-    var x = 0;
-
+//load more for loading data
     $scope.loadMore = function() {
-        x = 0;
 
-        if ( x < 1 ) {
-            PokemonFactory.loadMore(limit, offset);
-            offset += limit;
-            $scope.noMoreItemsAvailable = false;
-            $scope.$broadcast('searchResults');
-            x++;
+        if (  objectLength(PokemonFactory.searchResults) >= PokemonFactory.pokemonCount ) {
+            $scope.noMoreItemsAvailable = true;
         }
+
+        PokemonFactory.loadMore(limit, offset);
+
+        offset += 20;
+
+
         $scope.$broadcast('scroll.infiniteScrollComplete');
+        $scope.$broadcast('searchResults');
         PokemonFactory.searchResults;
 
     };
 
+    //counts the objects in an array
     function objectLength(obj) {
         var result = 0;
         for(var prop in obj) {
@@ -112,7 +114,6 @@ angular.module('starter.controllers', [])
         }
         return result;
     }
-
 
 
 })
