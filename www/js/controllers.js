@@ -66,11 +66,12 @@ angular.module('starter.controllers', [])
      $scope.counter = window.localStorage.getItem('counter');
     console.log($scope.counter);
 
-    // //get geolocation from phone
-    // $ionicPlatform.ready(function(){
-    //     $cordovaGeolocation.getCurrentPosition().then(function (position) {
-    //     });
-    // });
+    //get geolocation from phone
+    $ionicPlatform.ready(function(){
+        $cordovaGeolocation.getCurrentPosition().then(function (position) {
+            alert(position.coords.latitude)
+        });
+    });
 
 
     //search results from spotify in the Spotify factory
@@ -88,13 +89,15 @@ angular.module('starter.controllers', [])
 //load more for loading data
     $scope.loadMore = function() {
 
-        if (  objectLength(PokemonFactory.searchResults) >= PokemonFactory.pokemonCount ) {
+
+        if (  objectLength(PokemonFactory.searchResults) >= 811 ) {
             $scope.noMoreItemsAvailable = true;
         }
 
-        PokemonFactory.loadMore(limit, offset);
+            PokemonFactory.loadMore(limit, offset);
 
-        offset += 20;
+
+offset += 20;
 
 
         $scope.$broadcast('scroll.infiniteScrollComplete');
