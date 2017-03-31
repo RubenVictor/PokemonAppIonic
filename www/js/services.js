@@ -92,7 +92,6 @@ angular.module('starter.services', [])
         //variable
         var searchResults = JSON.parse( window.localStorage.getItem('myPokemons'));
 
-debugger;
         return{
 
             searchResults : searchResults

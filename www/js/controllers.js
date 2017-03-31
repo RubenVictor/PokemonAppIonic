@@ -132,12 +132,16 @@ offset += 20;
         $scope.searchResults = PokemonNearbyFactory.searchResults;
         $scope.addToMyPokemons = function(pokemon){
 
- if(window.localStorage.getItem('myPokemons') != "") {
+ if(pokemon != null) {
 //gets data from local storage puts it in an array and saves it in local storage
-     var a = [];
      a = (JSON.parse( window.localStorage.getItem('myPokemons')));
-     a[a.length+1] = pokemon;
-     debugger;
+     if( a != null){
+         a[a.length] = pokemon;
+
+     }else {
+         var a = [];
+         a[0] = pokemon;
+     }
      localStorage.setItem('myPokemons', JSON.stringify(a));
  }
 }
@@ -145,6 +149,10 @@ offset += 20;
 
     })
     .controller('MyPokemonsController', function($scope, $stateParams, MyPokemonFactory) {
+       //Item variable
+        $scope.listCanSwipe = true;
+
+        //items
         $scope.searchResults = MyPokemonFactory.searchResults;
 
     })
