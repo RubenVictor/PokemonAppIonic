@@ -1,4 +1,5 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCordova','ionic'])
+
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
     if(counter == undefined){
@@ -128,12 +129,12 @@ offset += 20;
 
     })
 
-    .controller('PokemonsNearbyController', function($scope, $stateParams, PokemonNearbyFactory) {
+    .controller('PokemonsNearbyController', function($ionicPopup,$scope, $stateParams, PokemonNearbyFactory) {
         $scope.searchResults = PokemonNearbyFactory.searchResults;
-        $scope.addToMyPokemons = function(pokemon){
 
- if(pokemon != null) {
-//gets data from local storage puts it in an array and saves it in local storage
+        $scope.addToMyPokemons = function(pokemon){
+    if(pokemon != null) {
+    //gets data from local storage puts it in an array and saves it in local storage
      a = (JSON.parse( window.localStorage.getItem('myPokemons')));
      if( a != null){
          a[a.length] = pokemon;
@@ -143,18 +144,80 @@ offset += 20;
          a[0] = pokemon;
      }
      localStorage.setItem('myPokemons', JSON.stringify(a));
- }
-}
+      $ionicPopup.alert({
+             title: 'Pokemon catchet',
+             template: '' + pokemon.name + ' has been added to your pokemons.'
 
-
+     })
+    }
+        }
     })
-    .controller('MyPokemonsController', function($scope, $stateParams, MyPokemonFactory) {
+
+
+
+    .controller('MyPokemonsController', function($ionicPlatform,$cordovaSocialSharing,$ionicPopup,$scope, $stateParams, MyPokemonFactory) {
        //Item variable
         $scope.listCanSwipe = true;
 
         //items
         $scope.searchResults = MyPokemonFactory.searchResults;
 
+        //functions
+        $ionicPlatform.ready(function() {
+        });
+        //share
+        $scope.share = function(item){
+            $cordovaSocialSharing
+                .shareViaWhatsApp("hoi", null, "http//")
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user
+                })}
+
+        //dell
+        $scope.del = function (item) {
+
+
+            // A confirm dialog
+            $scope.showConfirm = function(item) {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Delete '+item.name,
+                    template: 'Are you sure you want to delete '+item.name
+                });
+
+                confirmPopup.then(function(res) {
+                    if(res) {
+                        var json = JSON.parse(window.localStorage.getItem('myPokemons'));
+                        for(var i = 0; i < json.length; i++) {
+                            //if item was found delete it
+                            if(json[i].id == item.id){
+                                findAndRemove(json,'id',item.id);
+                            }
+                        }
+                        localStorage.setItem('myPokemons', JSON.stringify(json));
+
+                        counter = 0;
+                        console.log(item.name);
+
+                        $scope.searchResults = MyPokemonFactory.searchResults;
+
+                    } else {
+                    }
+                });
+            };
+
+$scope.showConfirm(item);
+        }
+
+        function findAndRemove(array, property, value) {
+            array.forEach(function(result, index) {
+                if(result[property] === value) {
+                    //Remove from array
+                    array.splice(index, 1);
+                }
+            });
+        }
     })
 
 

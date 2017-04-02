@@ -10,14 +10,13 @@
               ng-repeat="searchResult in searchResults"
               class="item-thumbnail-left>
         <i class="icon ion-ios-information" ui-sref="app.detail({ pokemon: searchResult.name })"></i>
-        <img ng-src="{{item.img}}">
         <h2>        {{searchResult.name}}</h2>
         <ion-option-button class="button-positive"
-                           ng-click="share(item)">
+                           ng-click="share(searchResult)">
           Share
         </ion-option-button>
         <ion-option-button class="button-dark"
-                           ng-click="edit(item)">
+                           ng-click="del(searchResult)">
           Delete
         </ion-option-button>
 
