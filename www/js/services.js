@@ -2,7 +2,7 @@ angular.module('starter.services', [])
 
 .factory('PokemonFactory', function($http){
     //base url
-    var baseUrl = 'http://localhost:8080/api/';
+    var baseUrl = 'https://cryptic-lowlands-27872.herokuapp.com/api/';
     //variable
     var searchResults = [];
     var pokemonCount = 811;
@@ -70,7 +70,7 @@ angular.module('starter.services', [])
 })
     .factory('PokemonNearbyFactory', function($http){
         //base url
-        var baseUrl = 'http://localhost:8080/api/';
+        var baseUrl = 'https://cryptic-lowlands-27872.herokuapp.com/api/';
         //variable
         var searchResults = [];
 
@@ -80,9 +80,28 @@ angular.module('starter.services', [])
 
                 return searchResults;
             });
+        var getNearbyPokemons = function (lat,long) {
+            var pokemonsNearby = [];
+            for(var i = 0; i < searchResults.length; i++) {
+                var iets = lat - 1;
+                var testobject = searchResults[i].latitude;
+
+                    if (searchResults[i].latitude > (lat- 1)
+                        && searchResults[i].latitude < (lat+ 1)
+                        && searchResults[i].longitude > (long- 1)
+                        && searchResults[i].longitude < (long+ 1)
+                    ){
+                        alert("Pokemon Dichtbij !!" + searchResults[i].name)
+                        pokemonsNearby.push(searchResults[i]);
+
+                    }
+            }
+return pokemonsNearby;
+        }
+
 
         return{
-
+            getNearbyPokemons :getNearbyPokemons,
             searchResults : searchResults
 
         }

@@ -2,12 +2,6 @@ angular.module('starter.controllers', ['ngCordova','ionic'])
 
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-    if(counter == undefined){
-        counter = 0;
-    }
-    var counter = window.localStorage.getItem("counter");
-    counter++;
-    window.localStorage.setItem('counter', counter);
 
 
     // With the new view caching in Ionic, Controllers are only called
@@ -57,22 +51,14 @@ angular.module('starter.controllers', ['ngCordova','ionic'])
 })
 
 
-.controller('PokemonsController', function($ionicPlatform, $scope, PokemonFactory, $stateParams, $cordovaGeolocation) {
+.controller('PokemonsController', function($ionicPlatform, $scope, PokemonFactory, $stateParams) {
   //save how many times the app has been used
     var limit = 20;
     var offset = 0;
 
 
 
-     $scope.counter = window.localStorage.getItem('counter');
-    console.log($scope.counter);
 
-    //get geolocation from phone
-    $ionicPlatform.ready(function(){
-        $cordovaGeolocation.getCurrentPosition().then(function (position) {
-            alert(position.coords.latitude)
-        });
-    });
 
 
     //search results from spotify in the Spotify factory
@@ -129,9 +115,49 @@ offset += 20;
 
     })
 
-    .controller('PokemonsNearbyController', function($ionicPopup,$scope, $stateParams, PokemonNearbyFactory) {
-        $scope.searchResults = PokemonNearbyFactory.searchResults;
+    .controller('PokemonsNearbyController', function($ionicPopup,$scope,$cordovaSocialSharing, $stateParams, $ionicPlatform,PokemonNearbyFactory, $cordovaGeolocation) {
+        //get geolocation from phone
+$ionicPlatform.ready(function(){
+    var posOptions = {
+        enableHighAccuracy:false,
+        maximumAge:Infinity,
+        timeout:60000
+    };
+    $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+            var lat  = position.coords.latitude;
+            var long = position.coords.longitude;
+            alert(long +'|'+lat);
+            $scope.searchResults = PokemonNearbyFactory.getNearbyPokemons(lat,long);
+        }, function(err) {
+            alert("no internet connection, or GPS location")
+        });
 
+
+    var watchOptions = {
+        enableHighAccuracy:false,
+        maximumAge:Infinity,
+        timeout:60000
+    };
+
+    var watch = $cordovaGeolocation.watchPosition(watchOptions);
+    watch.then(
+        null,
+        function(err) {
+            alert(JSON.stringify(err));
+
+        },
+        function(position) {
+            var lat  = position.coords.latitude
+            var long = position.coords.longitude
+            $scope.searchResults = PokemonNearbyFactory.getNearbyPokemons(lat,long);
+        });
+});
+
+
+
+//add pokemon to local storage
         $scope.addToMyPokemons = function(pokemon){
     if(pokemon != null) {
     //gets data from local storage puts it in an array and saves it in local storage
@@ -160,7 +186,11 @@ offset += 20;
         $scope.listCanSwipe = true;
 
         //items
-        $scope.searchResults = MyPokemonFactory.searchResults;
+        $scope.$on("$ionicView.enter", function(event, data){
+            // handle event
+            console.log('enter');
+            $scope.searchResults = JSON.parse(window.localStorage.getItem('myPokemons'));
+        });
 
         //functions
         $ionicPlatform.ready(function() {
@@ -168,12 +198,13 @@ offset += 20;
         //share
         $scope.share = function(item){
             $cordovaSocialSharing
-                .shareViaWhatsApp("hoi", null, "http//")
+                .share('I catchet '+item.name +', are you jalous', 'Look at my pokemon','file', 'http://') // Share via native share sheet
                 .then(function(result) {
                     // Success!
                 }, function(err) {
-                    // An error occurred. Show a message to the user
-                })}
+                    // An error occured. Show a message to the user
+                });
+    }
 
         //dell
         $scope.del = function (item) {
@@ -197,8 +228,6 @@ offset += 20;
                         }
                         localStorage.setItem('myPokemons', JSON.stringify(json));
 
-                        counter = 0;
-                        console.log(item.name);
 
                         $scope.searchResults = MyPokemonFactory.searchResults;
 
